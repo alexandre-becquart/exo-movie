@@ -1,5 +1,5 @@
 const config = {
-    port:8001
+    port: 8881
 }
 
-global.config=config;
+global.config = config;
