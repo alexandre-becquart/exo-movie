@@ -5,7 +5,7 @@ const routes = [{ // afficher les routes au server
     method: 'GET',
     action: 'list'
 }, {
-    url: '/movies/:id', // on donne la route :id pour pouvoir le modifier par la suite
+    url: '/movies/:id', // on donne la route :id pour pouvoir le modifier par la suite, on doit fair un helper pour le remplacer par le bon id
     controller: 'movie',
     method: 'GET',
     action: 'read'
@@ -13,6 +13,7 @@ const routes = [{ // afficher les routes au server
 
 module.exports = async (request, response) => {
     let parsedRoutes = await Helper.parsed(request, routes);
+    // console.log(parsedRoutes);
     let index = parsedRoutes.findIndex((route) => route.url === request.url && route.method === request.method); // il vérifie si l'index existe dans les routes et si la méthode égalemnt
     console.log(index);
     try {
