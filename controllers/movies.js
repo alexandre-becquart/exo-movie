@@ -1,12 +1,12 @@
-const fsp = require('fs').promises;
+const fsp = require('fs').promises; // on crée une promise de type asynchrone, il exécute toutes les taches en meme temps 
 const Movie = require('../models/movie')
 const Helper = require('../helpers')
 
-/**
+/** 
  * @param {*} request
  * @param {*} response
  */
-
+//permet de commenter la méthode que l'on crée 
 
 exports.list = async (request, response) => {
     console.log('LISTING')
@@ -14,18 +14,18 @@ exports.list = async (request, response) => {
     let template = await fsp.readFile(`${process.cwd()}/views/index.html`, 'UTF-8')
     //console.log(template);
 
-    let html = "<ul>";
-    let movies = await Movie.find({}).limit(10)
+    let html = "<ul>"; // on ouvre la liste
+    let movies = await Movie.find({}).limit(20) // on lui demande d'afficher une liste de 20 éléments
     movies.forEach((movie) => {
         html += `<a href="/movies/${movie._id}"><li>${movie.fields.title} : ${movie.fields.year} </li><a>`
     });
+    // on ajoute les élément grâce à la boucle
+
+    html += '</ul>' // on ferme la liste
 
 
-    html += '</ul>'
-
-
-    output = template.replace(/{{LIST}}/, html)
-    response.end(output)
+    output = template.replace(/{{LIST}}/, html) // on lui demande de remplacer {{LIST}} par html
+    response.end(output) // output devient la réponse
 }
 
 exports.read = async (req, res) => {
