@@ -54,6 +54,8 @@ exports.read = async (req, res) => {
 
     `
 
+    let edit = `/movies/edit/${Helper.id(req)}`
+
     if (movie.fields.running_time_secs) {
         description += `<p>Time: ${Moment.duration(parseInt(movie.fields.running_time_secs)*1000).asMinutes()} min</p>`
     }
@@ -61,7 +63,40 @@ exports.read = async (req, res) => {
     output = template
         .replace(/{{TITLE}}/, titleMovie)
         .replace(/{{DESCRIPTION}}/, description)
+        .replace(/{{EDIT}}/, edit)
 
     res.end(output)
+
+
+
+}
+
+exports.edit = async (req, res) => {
+    let output;
+
+    let template = await fsp.readFile(`${process.cwd()}/views/edit.html`, 'UTF-8')
+
+    //console.log(template);
+
+    let movie = await Movie.findOne({
+        _id: Helper.id(req),
+    })
+
+    output = template
+        .replace(/{{ID}}/, movie.id)
+        .replace(/{{TITLE}}/, movie.fields.title)
+        .replace(/{{IMAGE}}/, movie.fields.image_url.replace('http://', 'https://'))
+        .replace(/{{RELEASED_DATE}}/, Moment(movie.fields.release_date).format('DD - MM - YY'))
+        .replace(/{{GENRES}}/, movie.fields.genres)
+        .replace(/{{DIRECTORS}}/, movie.fields.directors)
+        .replace(/{{ACTORS}}/, movie.fields.actors)
+        .replace(/{{RATING}}/, movie.fields.rating)
+        .replace(/{{PLOT}}/, movie.fields.plot)
+        .replace(/{{RUNNING_TIME_SECS}}/, Moment.duration(parseInt(movie.fields.running_time_secs) * 1000).asMinutes())
+        .replace(/{{YEAR}}/, movie.fields.year)
+
+    res.end(output)
+
+
 
 }
